@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Two-Year Polymath Track</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d1210;
+    --surface: #121815;
+    --surface-2: #161d19;
+    --ink: #e9e4d6;
+    --ink-dim: #a9a89c;
+    --paper: #ece5d3;
+    --paper-ink: #191510;
+    --copper: #c97a3d;
+    --copper-dim: #8a5a30;
+    --cyan: #6fb8ae;
+    --rule: rgba(233, 228, 214, 0.14);
+    --rule-strong: rgba(233, 228, 214, 0.28);
+    --serif: 'Zilla Slab', serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(201,122,61,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 20%, rgba(111,184,174,0.06), transparent 60%);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection{ background: var(--copper); color: #12100c; }
+
+  a{ color: var(--cyan); }
+
+  .doc{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  /* ---------- HEADER / HERO ---------- */
+  header.hero{
+    padding: 84px 0 56px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .filing-meta{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin-bottom: 34px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filing-meta span.dim{ color: var(--ink-dim); }
+
+  h1.title{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(38px, 6vw, 60px);
+    line-height: 1.06;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+  h1.title em{
+    font-style: italic;
+    color: var(--copper);
+  }
+
+  p.abstract{
+    max-width: 620px;
+    color: var(--ink-dim);
+    font-size: 17px;
+    margin: 0;
+  }
+  p.abstract strong{ color: var(--ink); font-weight: 600;}
+
+  .field-tags{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+  }
+  .field-tags span{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--ink-dim);
+    border: 1px solid var(--rule-strong);
+    border-radius: 3px;
+    padding: 5px 10px;
+  }
+
+  /* ---------- NUMBERED PARAGRAPH BLOCKS ---------- */
+  section.para-block{
+    display: grid;
+    grid-template-columns: 74px 1fr;
+    gap: 22px;
+    padding: 46px 0;
+    border-bottom: 1px solid var(--rule);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  section.para-block.visible{ opacity: 1; transform: translateY(0); }
+
+  .para-num{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--copper-dim);
+    padding-top: 4px;
+    white-space: nowrap;
+  }
+
+  .para-content h2{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 27px;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+  .para-content h2 .sub{
+    display:block;
+    font-family: var(--mono);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+  .para-content p{
+    color: var(--ink-dim);
+    max-width: 620px;
+    margin: 0 0 14px;
+  }
+  .para-content p:last-child{ margin-bottom: 0; }
+  .para-content strong{ color: var(--ink); font-weight: 600; }
+
+  .chip-row{
+    display:flex; flex-wrap: wrap; gap: 8px; margin-top: 18px;
+  }
+  .chip{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 1px solid var(--rule-strong);
+    border-radius: 3px;
+    padding: 6px 11px;
+  }
+
+  /* ---------- FIGURE / DIAGRAM ---------- */
+  .figure{
+    margin: 8px 0 6px;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+    padding: 28px 20px 20px;
+  }
+  .figure svg{ width: 100%; height: auto; display:block; }
+  .figure-caption{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.04em;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .figure-caption b{ color: var(--copper); }
+
+  /* ---------- CLAIMS (essential math) ---------- */
+  .claims{
+    counter-reset: claim;
+    margin-top: 8px;
+  }
+  .claim{
+    counter-increment: claim;
+    position: relative;
+    padding: 18px 0 18px 46px;
+    border-top: 1px dashed var(--rule);
+  }
+  .claim:first-child{ border-top: none; padding-top: 4px; }
+  .claim::before{
+    content: "CLAIM " counter(claim);
+    position: absolute;
+    left: 0;
+    top: 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--copper);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+  .claim:first-child::before{ top: 4px; }
+  .claim h3{
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .claim p{
+    color: var(--ink-dim);
+    margin: 0;
+    font-size: 15px;
+    max-width: 560px;
+  }
+  .claim .wherein{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--cyan);
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* ---------- REFERENCE TABLE ---------- */
+  .table-wrap{
+    overflow-x: auto;
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+    background: var(--surface);
+  }
+  table.reftable{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    min-width: 640px;
+  }
+  table.reftable thead th{
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--copper);
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule-strong);
+    background: var(--surface-2);
+  }
+  table.reftable tbody td{
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: var(--ink-dim);
+  }
+  table.reftable tbody tr:last-child td{ border-bottom: none; }
+  table.reftable td.area{
+    color: var(--ink);
+    font-weight: 600;
+    font-family: var(--serif);
+    font-size: 16px;
+    white-space: nowrap;
+  }
+  table.reftable td.primary{ color: var(--ink); }
+  table.reftable tbody tr:hover{ background: rgba(201,122,61,0.05); }
+
+  /* ---------- PULL QUOTE / VERDICT ---------- */
+  .verdict{
+    margin-top: 46px;
+    padding: 34px 30px;
+    background: var(--paper);
+    color: var(--paper-ink);
+    border-radius: 6px;
+    position: relative;
+  }
+  .verdict::before{
+    content: "ASSESSMENT";
+    display:block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--copper-dim);
+    margin-bottom: 12px;
+  }
+  .verdict p{
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.5;
+    margin: 0 0 12px;
+  }
+  .verdict p:last-child{ margin-bottom: 0; font-size: 15px; font-family: var(--sans); color: #4a4437; }
+
+  footer{
+    padding: 40px 0 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 640px){
+    section.para-block{ grid-template-columns: 1fr; gap: 8px; }
+    .para-num{ padding-top: 0; }
+    .claim{ padding-left: 0; border-top: 1px dashed var(--rule); }
+    .claim::before{ position: static; writing-mode: horizontal-tb; transform: none; display:block; margin-bottom: 6px; }
+    .claim:first-child::before{ margin-top: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    section.para-block{ transition: none; opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc">
+
+  <header class="hero">
+    <div class="filing-meta">
+      <span>Personal R&amp;D Filing — Curriculum No. 002</span>
+      <span class="dim">Status: Pre-FU-Money / Foundation Phase</span>
+    </div>
+    <h1 class="title">The Two-Year<br><em>Polymath</em> Track</h1>
+    <p class="abstract">A foundation built before going unhinged on pure engineering invention. <strong>Objective:</strong> acquire physical intuition and hands-on engineering judgment — not credentials, not specialization — using software and simulation as tools to explore ideas faster once the capital clock runs out.</p>
+    <div class="field-tags">
+      <span>Linear Algebra</span><span>Differential Equations</span><span>Numerical Methods</span>
+      <span>Graphics</span><span>Robotics</span><span>Patents</span><span>Quantum (deferred)</span>
+    </div>
+  </header>
+
+  <!-- 0001 -->
+  <section class="para-block">
+    <div class="para-num">[0001]</div>
+    <div class="para-content">
+      <h2><span class="sub">Entry point</span>Computer graphics as the gateway discipline</h2>
+      <p>Graphics is the rare subject that forces fluency in <strong>linear algebra, geometry, numerical methods, optimization, physics, parallel computing,</strong> and <strong>GPU architecture</strong> — all at once, all in service of something you can see render on screen.</p>
+      <p>A surprising amount of that fluency transfers directly into <strong>robotics, simulation, CAD, computer vision,</strong> and <strong>scientific computing</strong>. It's less a subject than a forcing function for everything else on this list.</p>
+      <div class="figure">
+        <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#6fb8ae"/>
+            </marker>
+          </defs>
+          <!-- spokes -->
+          <g stroke="#3a423e" stroke-width="1" stroke-dasharray="3 4">
+            <line x1="380" y1="180" x2="130" y2="60"/>
+            <line x1="380" y1="180" x2="630" y2="60"/>
+            <line x1="380" y1="180" x2="90"  y2="180"/>
+            <line x1="380" y1="180" x2="670" y2="180"/>
+            <line x1="380" y1="180" x2="130" y2="300"/>
+            <line x1="380" y1="180" x2="630" y2="300"/>
+          </g>
+          <!-- center node -->
+          <circle cx="380" cy="180" r="52" fill="#161d19" stroke="#c97a3d" stroke-width="1.5"/>
+          <text x="380" y="176" text-anchor="middle" fill="#e9e4d6" font-family="Zilla Slab, serif" font-size="15" font-weight="600">Computer</text>
+          <text x="380" y="194" text-anchor="middle" fill="#e9e4d6" font-family="Zilla Slab, serif" font-size="15" font-weight="600">Graphics</text>
+
+          <!-- outer nodes -->
+          <g font-family="JetBrains Mono, monospace" font-size="12.5" fill="#a9a89c">
+            <circle cx="130" cy="60" r="6" fill="#6fb8ae"/>
+            <text x="130" y="40" text-anchor="middle">Robotics</text>
+
+            <circle cx="630" cy="60" r="6" fill="#6fb8ae"/>
+            <text x="630" y="40" text-anchor="middle">Simulation</text>
+
+            <circle cx="90" cy="180" r="6" fill="#6fb8ae"/>
+            <text x="90" y="205" text-anchor="middle">CAD</text>
+
+            <circle cx="670" cy="180" r="6" fill="#6fb8ae"/>
+            <text x="670" y="205" text-anchor="middle">Computer Vision</text>
+
+            <circle cx="130" cy="300" r="6" fill="#6fb8ae"/>
+            <text x="130" y="325" text-anchor="middle">Scientific</text>
+            <text x="130" y="340" text-anchor="middle">Computing</text>
+
+            <circle cx="630" cy="300" r="6" fill="#6fb8ae"/>
+            <text x="630" y="325" text-anchor="middle">GPU /</text>
+            <text x="630" y="340" text-anchor="middle">Parallel Systems</text>
+          </g>
+        </svg>
+        <div class="figure-caption"><b>FIG. 1</b> — Transfer diagram: graphics as the shared substrate across adjacent engineering disciplines.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 0002 -->
+  <section class="para-block">
+    <div class="para-num">[0002]</div>
+    <div class="para-content">
+      <h2><span class="sub">Method</span>Mathematics, revised — not re-derived</h2>
+      <p>The goal isn't a 1,500-page pure math text. It's the mathematics engineers actually reach for, repeatedly, under pressure, while building things.</p>
+
+      <div class="claims">
+        <div class="claim">
+          <h3>Linear algebra</h3>
+          <p>Vectors, matrices, eigenvalues, SVD, coordinate transforms.</p>
+          <span class="wherein">wherein this is probably the single most important subject on the list.</span>
+        </div>
+        <div class="claim">
+          <h3>Calculus</h3>
+          <p>Derivatives, partial derivatives, multiple integrals, vector calculus.</p>
+          <span class="wherein">wherein the purpose is fluency sufficient to read physical models, not proof technique.</span>
+        </div>
+        <div class="claim">
+          <h3>Differential equations</h3>
+          <p>Mechanics, electronics, control, fluids, heat — everything eventually becomes a differential equation.</p>
+          <span class="wherein">wherein this is the highest-leverage subject after linear algebra.</span>
+        </div>
+        <div class="claim">
+          <h3>Probability</h3>
+          <p>Underlies AI, estimation, robotics, finance, and reasoning under uncertainty generally.</p>
+        </div>
+        <div class="claim">
+          <h3>Numerical methods</h3>
+          <p>Newton's method, gradient descent, finite differences, finite elements, optimization.</p>
+          <span class="wherein">wherein real engineers almost never solve equations exactly — they solve them approximately, and this is chronically underrated as a subject.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 0003 -->
+  <section class="para-block">
+    <div class="para-num">[0003]</div>
+    <div class="para-content">
+      <h2><span class="sub">Reference stack</span>By discipline, primary text plus supplement</h2>
+      <p>One canonical resource per discipline, backed by targeted video lecture support rather than a full course. Depth comes from the primary text; MIT lectures fill the specific gap you hit while reading.</p>
+      <div class="table-wrap">
+        <table class="reftable">
+          <thead>
+            <tr><th>Area</th><th>Primary resource</th><th>Supplement</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="area">Physics</td>
+              <td class="primary">The Feynman Lectures on Physics</td>
+              <td>MIT 8.01, 8.02, 8.03 lectures as needed</td>
+            </tr>
+            <tr>
+              <td class="area">Electrical</td>
+              <td class="primary">The Art of Electronics</td>
+              <td>MIT Circuits &amp; Electronics (6.002 / 6.002x)</td>
+            </tr>
+            <tr>
+              <td class="area">Mechanical</td>
+              <td class="primary">Shigley's Mechanical Engineering Design</td>
+              <td>MIT statics/dynamics lectures only where rusty</td>
+            </tr>
+            <tr>
+              <td class="area">Control</td>
+              <td class="primary">Feedback Systems</td>
+              <td>MATLAB / Python simulations</td>
+            </tr>
+            <tr>
+              <td class="area">Aerospace</td>
+              <td class="primary">Fundamentals of Aerodynamics</td>
+              <td>MIT Unified Engineering lectures</td>
+            </tr>
+            <tr>
+              <td class="area">Computer Graphics</td>
+              <td class="primary">Physically Based Rendering: From Theory to Implementation</td>
+              <td>SIGGRAPH talks + implement a renderer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 0004 -->
+  <section class="para-block">
+    <div class="para-num">[0004]</div>
+    <div class="para-content">
+      <h2><span class="sub">Instrument</span>MIT OpenCourseWare, used surgically</h2>
+      <p>OCW is excellent precisely because you don't have to watch everything. Use it as a lookup tool, not a curriculum:</p>
+      <div class="chip-row">
+        <span class="chip">reading The Art of Electronics</span>
+        <span class="chip">→ hit op-amps</span>
+        <span class="chip">→ watch one MIT lecture</span>
+        <span class="chip">→ keep reading</span>
+      </div>
+      <p style="margin-top:16px;">One lecture on demand beats an entire semester binged out of sequence.</p>
+    </div>
+  </section>
+
+  <!-- 0005 -->
+  <section class="para-block">
+    <div class="para-num">[0005]</div>
+    <div class="para-content">
+      <h2><span class="sub">Deferred art</span>Quantum mechanics — postponed, not skipped</h2>
+      <p>Not because it's unimportant — because almost every other discipline above raises invention capability sooner. Quantum becomes materially easier once <strong>linear algebra, probability,</strong> and <strong>differential equations</strong> are fluent.</p>
+      <p>At that point, <em>Introduction to Quantum Mechanics</em> (Griffiths) is the natural next step. If quantum computing specifically becomes interesting later, <em>Quantum Computation and Quantum Information</em> (Nielsen &amp; Chuang) is the standard reference.</p>
+    </div>
+  </section>
+
+  <!-- 0006 -->
+  <section class="para-block">
+    <div class="para-num">[0006]</div>
+    <div class="para-content">
+      <h2><span class="sub">Overlooked habit</span>Read patents, a few hours a week</h2>
+      <p>Not because they're enjoyable — they usually aren't. Because they teach four things nothing else does as directly:</p>
+      <div class="chip-row">
+        <span class="chip">how inventions are claimed</span>
+        <span class="chip">what counts as novel</span>
+        <span class="chip">thinking in embodiments &amp; alternatives</span>
+        <span class="chip">where the frontier actually is</span>
+      </div>
+      <p style="margin-top:16px;">Over a decade, hundreds of patents will likely sharpen engineering instinct as much as another textbook would.</p>
+    </div>
+  </section>
+
+  <div class="verdict">
+    <p>The two-year plan is ambitious but plausible — <em>if</em> the objective is a deep engineering foundation rather than specialist mastery of every field on the list.</p>
+    <p>The software background is the real unlock here: decomposing complex systems, writing simulations, and reasoning algorithmically are already in hand. The two years can go almost entirely toward physical intuition, while software and AI serve as the tools that validate ideas faster.</p>
+  </div>
+
+  <footer>
+    <span>Filed: Foundation Phase, Year 0</span>
+    <span>Next review: Quantum readiness gate</span>
+  </footer>
+
+</div>
+
+<script>
+  const blocks = document.querySelectorAll('.para-block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>
